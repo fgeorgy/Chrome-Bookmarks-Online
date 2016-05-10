@@ -3,12 +3,16 @@
  */
 (function($){
     $.fn.CromeBookmarks = function (url, options) {
+
         var that = this;
         var defaults = {
             loadFavicons: false,
+            autodelay: 200,
+            minlen: 2,
             cookieid: 'chrome-bookmarks',
             search: $('form:first') // form selector
         };
+
         options = $.extend({}, defaults, options);
         
         if (options.loadFavicons) {
@@ -32,8 +36,7 @@
                     var type      = data[i].type == 'folder' ? 'folder' : 'file',
                         className = type == 'folder' ? 'class="folder"' : '',
                         url       = type == 'folder' ? 'javascript:void(0);' : data[i].url,
-                        a         = '<a id="item-' + data[i].id + '" data-item="'
-                                + data[i].id + '" href="' + url + '">' + (data[i].name || '(no label)') + '</a>',
+                        a         = '<a id="item-' + data[i].id + '" data-item="' + data[i].id + '" href="' + url + '" target="_blank">' + (data[i].name || '(no label)') + '</a>',
                         li        = '<li ' + className + '>' + a;
                     
                     dataIndex[dataIndex.length] = {
@@ -72,13 +75,15 @@
             }
             return ret;
         };
+
         var saveOpened = function(){
             var arr = [];
             for (var i in opened) {
                 arr.push(opened[i]);
             }
             $.cookie(options.cookieid, arr.join(','));
-        }
+        };
+
         var toggleFolder = function(){
             if (inSearch) {
                 return false;
@@ -98,11 +103,12 @@
             }
             saveOpened();
             return false;
-        }
+        };
         
         var initSearch = function($form){
+
             var input = $form.find('input[name="query"]'),
-                cancel = $('a.clr_search'),
+                cancel = $('a#clear'),
                 keyPressTimeout;
             
             cancel.click(function(){
@@ -119,7 +125,7 @@
                 inSearch = false;
                 cancel.hide();
                 $notice.hide();
-            }
+            };
             
             var openItem = function(obj) {
                 $('#item-'+obj.id)
@@ -127,11 +133,11 @@
                     .parents('li')
                     .addClass('open')
                     .loadFavicons();
-            }
+            };
             
             var search = function(){
                 var val = input.val();
-                if (val.length > 2) {
+                if (val.length >= options.minlen) {
                     $(that).addClass('insearch');
                     $('a', that).removeClass('hl');
                     $('li', that).removeClass('open');
@@ -159,17 +165,17 @@
                 if (val.length) {
                     cancel.show();
                 }
-            }
+            };
             
             input.bind('keyup', function(){
                 clearTimeout(keyPressTimeout);
-                keyPressTimeout = setTimeout(search, 1e3);
+                keyPressTimeout = setTimeout(search, options.autodelay);
             });
             $form.submit(function(){
                 search();
                 return false; 
             });
-        }
+        };
 
         var cacheBuster = Math.round(new Date()/(1000*60));
         $.ajax({
@@ -192,7 +198,8 @@
             }
         });
         
-        $.fn.loadFavicons = function(){
+        $.fn.loadFavicons = function() {
+
             if (!options.loadFavicons) {
                 return;
             }

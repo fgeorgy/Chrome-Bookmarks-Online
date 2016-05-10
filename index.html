@@ -1,34 +1,35 @@
 <!doctype html>
-<meta charset="utf-8" />
-<!--
-    Project page: https://github.com/gornostal/Chrome-Bookmarks-Online
-    Author: Aleksandr Gornostal <info@sanya.pp.ua>
--->
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Chrome Bookmarks</title>
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-<script type="text/javascript" src="script.js"></script>
-<script type="text/javascript">
-    $(function(){
-        var $bm = $('#bookmarks');
-        $bm.CromeBookmarks('Bookmarks', {
-            loadFavicons: true
+<head>
+    <meta charset="utf-8" />
+    <!-- Project page: https://github.com/gornostal/Chrome-Bookmarks-Online Author: Aleksandr Gornostal <info@sanya.pp.ua> -->
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Chrome Bookmarks</title>
+    <!--<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>-->
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+    <script type="text/javascript" src="script.js"></script>
+    <script type="text/javascript">
+        $(function(){
+            var $bm = $('#bookmarks');
+            $bm.CromeBookmarks('Bookmarks', {
+                loadFavicons: false,
+                autodelay: 200,
+                minlen: 2
+            });
         });
-    });
-</script>
-<link href="style.css" rel="stylesheet" type="text/css" />
+    </script>
+    <link href="style.css" rel="stylesheet" type="text/css" />
+</head>
 <body>
     <header>
-        <h1>Chrome Bookmarks</h1>
+        <!--<h1>Chrome Bookmarks</h1>-->
         <form action="" method="get">
-            <fieldset>
-                <legend>Search</legend>
-                <input type="text" name="query" autofocus placeholder="Search" />
+            <!--<fieldset>-->
+                <!--<legend>Search</legend>-->
+                <input type="text" name="query" autofocus placeholder="search..." />
                 <input type="submit" value="Search" />
-                <a href="#" class="clr_search" title="Clear search" ></a>
-            </fieldset>
+                <a href="#" id="clear" title="Clear search" >clear</a>
+            <!--</fieldset>-->
         </form>
     </header>
-
     <ul id="bookmarks"></ul>
 </body>
